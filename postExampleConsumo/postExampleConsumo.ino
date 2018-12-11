@@ -18,6 +18,11 @@ IPAddress subnet(255, 255, 240, 0);
 // with the IP address and port of the server 
 // that you want to connect to (port 80 is default for HTTP):
 EthernetClient client;
+String varPredio = "3";
+String varSala = "13";
+String varKWH = "3000.0";
+String varData = "2018-12-01";
+String temp = ("predio="+varPredio+"&sala="+varSala+"&kwh="+varKWH+"&data="+varData);  
 
 void setup() {
  // Open serial communications and wait for port to open:
@@ -40,11 +45,18 @@ void setup() {
   // if you get a connection, report back via serial:
   if (client.connect(server, 80)) {
     Serial.println("connected");
-    // Make your API request:
-    client.println("GET /salasdetalhe/1 HTTP/1.1");
+    Serial.println("Sending to Server: ");                    
+    client.println("POST /consumos HTTP/1.1");           
+    Serial.print("POST /consumos HTTP/1.1");           
     client.println("Host: marcmatias.pythonanywhere.com");
+    client.println("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
     client.println("Connection: close");
+    client.println("User-Agent: Arduino/1.0");
+    client.print("Content-Length: ");
+    client.println(temp.length());
     client.println();
+    client.print(temp);
+    client.println(); 
   } 
   else {
     // kf you didn't get a connection to the server:
